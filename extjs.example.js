@@ -39,3 +39,10 @@ import Default, { Part as Tail, Chunk } from 'package';
 // Check for existing
 var foo = 12;
 var bar = foo ?: "default";
+
+
+// === DEFAULT PARAM === //
+
+function Require(foo, bar = 21) {}
+var Run = function(first = 0, second = 1) {}
+

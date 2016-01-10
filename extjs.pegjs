@@ -1453,8 +1453,21 @@ FunctionExpression
       };
     }
 
+FormalParameterDefault
+  = "=" __ assign:AssignmentExpression {
+    return assign;
+  }
+
+FormalParameterSingle
+  = name:Identifier __ def:FormalParameterDefault {
+    return { type: "FunctionParameter", name: name, default: def };
+  }
+  / name:Identifier {
+    return { type: "FunctionParameter", name: name };
+  }
+
 FormalParameterList
-  = head:Identifier tail:(__ "," __ Identifier)* {
+  = head:FormalParameterSingle tail:(__ "," __ FormalParameterSingle)* {
       return buildList(head, tail, 3);
     }
 
