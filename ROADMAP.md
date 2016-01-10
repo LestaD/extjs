@@ -17,6 +17,11 @@
 - Require
 - Import
 - Coalesce
+- Let/Const
+- Classes
+- Shorthand
 - Default param
+- Templates
 - Lambda to Arrow functions
+- For-Of
 
