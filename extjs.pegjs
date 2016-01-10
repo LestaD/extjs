@@ -661,7 +661,7 @@ NewExpression
 
 CallExpression
   = head:(
-      callee:MemberExpression __ args:Arguments {
+      callee:NewExpression __ args:Arguments {
         return { type: "CallExpression", callee: callee, arguments: args };
       }
     )
@@ -1463,16 +1463,43 @@ FunctionExpression
       };
     }
 
-ArrowFunctionExpression
-  = "(" __ params:(FormalParameterList __)? ")" __ "=>" __
-    "{" __ body:FunctionBody __ "}"
-    {
-      return {
-        type:   "ArrowFunctionExpression",
-        params: optionalList(extractOptional(params, 0)),
-        body:   body
-      }
+ArrowFunctionParams
+  = param:FormalParameterSingle {
+    return [param];
+  }
+  / "(" __ params:(FormalParameterList __)? __ ")" {
+    return optionalList(extractOptional(params, 0))
+  }
+
+ArrowFunctionBody
+  = body:Statement {
+    return {
+      type: "BlockStatement",
+      body: [{
+        type: "ReturnStatement",
+        argument: extractOptional(body, 'expression')
+      }]
     }
+  }
+  / "{" __ body:FunctionBody __ "}" {
+    return body;
+  }
+
+ArrowFunctionExpression
+  = DoToken __ "=>" __ body:ArrowFunctionBody {
+    return {
+      type:   "ArrowFunctionExpression",
+      params: [],
+      body:   body
+    }
+  }
+  / DoToken __ params:ArrowFunctionParams __ "=>" __ body:ArrowFunctionBody {
+    return {
+      type:   "ArrowFunctionExpression",
+      params: optionalList(extractOptional(params, 0)),
+      body:   body
+    }
+  }
 
 FormalParameterDefault
   = "=" __ assign:AssignmentExpression {

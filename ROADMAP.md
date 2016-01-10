@@ -8,7 +8,7 @@
 - [Classes](http://exploringjs.com/es6/ch_classes.html)
 - [Shorthand](http://exploringjs.com/es6/ch_oop-besides-classes.html#_new-object-literal-features)
 - Template literals
-- Arrow functions
+- Fix and test Lambda functions
 - For-Of
 
 
@@ -18,4 +18,5 @@
 - Import
 - Coalesce
 - Default param
+- Lambda to Arrow functions
 

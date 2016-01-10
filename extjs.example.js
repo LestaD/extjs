@@ -46,3 +46,31 @@ let bar = foo ?: "default";
 function Require(foo, bar = 21) {}
 let Run = function(first = 0, second = 1) {}
 
+
+// === LAMBDA === //
+
+// Lambda defines with `do` and `=>`
+
+const lambda = do (param) => {
+  return param + 1;
+}
+
+// If lambda has only one param
+const b2 = do param => { return param + 1; };
+
+// If lambda has only one statement in body
+// Result of statement returns
+const b3 = do param => param + 1;
+
+// But now lambda can be called only with `{` `}` parens
+(do param => {
+  return param + 200;
+})(300);
+// And this was wrong code.
+// ArrowFunctionExpression body now empty ReturnStatement
+// TOFIX!!!
+
+
+// If lambda doesn't have parameters
+const b4 = do => [].splice.call(arguments);
+
