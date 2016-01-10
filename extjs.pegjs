@@ -218,14 +218,14 @@ Keyword
   / ThrowToken
   / TryToken
   / TypeofToken
-  / VarToken
+  / LetToken
+  / ConstToken
   / VoidToken
   / WhileToken
   / WithToken
 
 FutureReservedWord
   = ClassToken
-  / ConstToken
   / EnumToken
   / ExportToken
   / ExtendsToken
@@ -495,7 +495,7 @@ ThrowToken      = "throw"      !IdentifierPart
 TrueToken       = "true"       !IdentifierPart
 TryToken        = "try"        !IdentifierPart
 TypeofToken     = "typeof"     !IdentifierPart
-VarToken        = "var"        !IdentifierPart
+LetToken        = "let"        !IdentifierPart
 VoidToken       = "void"       !IdentifierPart
 WhileToken      = "while"      !IdentifierPart
 WithToken       = "with"       !IdentifierPart
@@ -627,7 +627,8 @@ PropertySetParameterList
 
 MemberExpression
   = head:(
-        PrimaryExpression
+      ArrowFunctionExpression
+      / PrimaryExpression
       / FunctionExpression
       / NewToken __ callee:MemberExpression __ args:Arguments {
           return { type: "NewExpression", callee: callee, arguments: args };
@@ -1006,6 +1007,7 @@ ExpressionNoIn
 Statement
   = Block
   / VariableStatement
+  / ConstantStatement
   / EmptyStatement
   / ExpressionStatement
   / IfStatement
@@ -1034,9 +1036,17 @@ StatementList
   = head:Statement tail:(__ Statement)* { return buildList(head, tail, 1); }
 
 VariableStatement
-  = VarToken __ declarations:VariableDeclarationList EOS {
+  = LetToken __ declarations:VariableDeclarationList EOS {
       return {
         type:         "VariableDeclaration",
+        declarations: declarations
+      };
+    }
+
+ConstantStatement
+  = ConstToken __ declarations:VariableDeclarationList EOS {
+      return {
+        type:         "ConstantDeclaration",
         declarations: declarations
       };
     }
@@ -1135,7 +1145,7 @@ IterationStatement
     }
   / ForToken __
     "(" __
-    VarToken __ declarations:VariableDeclarationListNoIn __ ";" __
+    LetToken __ declarations:VariableDeclarationListNoIn __ ";" __
     test:(Expression __)? ";" __
     update:(Expression __)?
     ")" __
@@ -1169,7 +1179,7 @@ IterationStatement
     }
   / ForToken __
     "(" __
-    VarToken __ declarations:VariableDeclarationListNoIn __
+    LetToken __ declarations:VariableDeclarationListNoIn __
     InToken __
     right:Expression __
     ")" __
@@ -1451,6 +1461,17 @@ FunctionExpression
         params: optionalList(extractOptional(params, 0)),
         body:   body
       };
+    }
+
+ArrowFunctionExpression
+  = "(" __ params:(FormalParameterList __)? ")" __ "=>" __
+    "{" __ body:FunctionBody __ "}"
+    {
+      return {
+        type:   "ArrowFunctionExpression",
+        params: optionalList(extractOptional(params, 0)),
+        body:   body
+      }
     }
 
 FormalParameterDefault

@@ -37,12 +37,12 @@ import Default, { Part as Tail, Chunk } from 'package';
 // === COALESCE === //
 
 // Check for existing
-var foo = 12;
-var bar = foo ?: "default";
+const foo = 12;
+let bar = foo ?: "default";
 
 
 // === DEFAULT PARAM === //
 
 function Require(foo, bar = 21) {}
-var Run = function(first = 0, second = 1) {}
+let Run = function(first = 0, second = 1) {}
 
