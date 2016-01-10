@@ -17,7 +17,7 @@ require olly.routing.resolver as OResolver;
 require Parser, Router as ORouter from olly.routing.resolver;
 
 // Default requiring
-require default as OllyBase;
+require default as OllyBase from olly;
 
 
 // === IMPORT === //
