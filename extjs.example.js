@@ -9,14 +9,14 @@
 require olly.routing.resolver;
 
 // named requiring
-// Create OResolver variable
+// Create `OResolver` variable
 require olly.routing.resolver as OResolver;
 
 // Chained requiring
 // Create `Parser` and `ORouter` variables
 require Parser, Router as ORouter from olly.routing.resolver;
 
-// Default requiring
+// Default requiring from `olly`
 require default as OllyBase from olly;
 
 
